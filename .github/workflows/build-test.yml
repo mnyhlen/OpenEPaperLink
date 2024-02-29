@@ -1,4 +1,4 @@
-name: Firmware build test
+name: Firmware build test2
 
 on: [push,pull_request]
 
