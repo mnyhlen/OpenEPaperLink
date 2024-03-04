@@ -319,18 +319,21 @@ void drawNew(const uint8_t mac[8], tagRecord *&taginfo) {
 
         case 4:  // Weather
 
+        {
             // https://open-meteo.com/
             // https://geocoding-api.open-meteo.com/v1/search?name=eindhoven
             // https://api.open-meteo.com/v1/forecast?latitude=52.52&longitude=13.41&current_weather=true
             // https://github.com/erikflowers/weather-icons
 
-            drawWeather(filename, cfgobj, taginfo, imageParams);
             time_t nextUpdateTime = now + (1800 - now % 1800);
+
+            drawWeather(filename, cfgobj, taginfo, imageParams);
             if (nextUpdateTime < (now + 600)) nextUpdateTime += 1800;
             taginfo->nextupdate = nextUpdateTime;
             updateTagImage(filename, mac, 15, taginfo, imageParams);
             break;
-
+        }
+        
         case 8:  // Forecast
 
             drawForecast(filename, cfgobj, taginfo, imageParams);
