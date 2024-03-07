@@ -853,7 +853,9 @@ void drawWeather(String &filename, JsonObject &cfgobj, const tagRecord *taginfo,
     }
 
     const auto &currentWeather = doc["current_weather"];
+    const auto &currentWeatherUnits = doc["current_weather_units"];
     const double temperature = currentWeather["temperature"].as<double>();
+    const String temperatureUnit = currentWeatherUnits["temperature"].as<String>();
     float windspeed = currentWeather["windspeed"].as<float>();
     int windval = 0;
     const int winddirection = currentWeather["winddirection"].as<int>();
@@ -901,7 +903,7 @@ void drawWeather(String &filename, JsonObject &cfgobj, const tagRecord *taginfo,
     char tmpOutput[5];
     dtostrf(temperature, 2, 1, tmpOutput);
     const auto &temp = doc["temp"];
-    drawString(spr, String(tmpOutput), temp[0], temp[1], temp[2], TL_DATUM, (temperature < 0 ? imageParams.highlightColor : TFT_BLACK));
+    drawString(spr, String(tmpOutput) + temperatureUnit, temp[0], temp[1], temp[2], TL_DATUM, (temperature < 0 ? imageParams.highlightColor : TFT_BLACK));
 
     const int iconcolor = (weathercode == 55 || weathercode == 65 || weathercode == 75 || weathercode == 82 || weathercode == 86 || weathercode == 95 || weathercode == 96 || weathercode == 99)
                               ? imageParams.highlightColor
