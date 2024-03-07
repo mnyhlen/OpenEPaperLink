@@ -855,7 +855,7 @@ void drawWeather(String &filename, JsonObject &cfgobj, const tagRecord *taginfo,
     const auto &currentWeather = doc["current_weather"];
     const auto &currentWeatherUnits = doc["current_weather_units"];
     const double temperature = currentWeather["temperature"].as<double>();
-    const String temperatureUnit = currentWeatherUnits["temperature"].as<String>();
+    String temperatureUnit = currentWeatherUnits["temperature"].as<String>();
     float windspeed = currentWeather["windspeed"].as<float>();
     int windval = 0;
     const int winddirection = currentWeather["winddirection"].as<int>();
