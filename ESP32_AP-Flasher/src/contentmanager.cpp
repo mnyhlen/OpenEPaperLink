@@ -335,8 +335,11 @@ void drawNew(const uint8_t mac[8], tagRecord *&taginfo) {
             // https://api.open-meteo.com/v1/forecast?latitude=52.52&longitude=13.41&current_weather=true
             // https://github.com/erikflowers/weather-icons
 
+            time_t nextUpdateTime = now + (1800 - now % 1800);
+
             drawWeather(filename, cfgobj, taginfo, imageParams);
-            taginfo->nextupdate = now + 1800;
+            if (nextUpdateTime < (now + 600)) nextUpdateTime += 1800;
+            taginfo->nextupdate = now + nextUpdateTime;
             updateTagImage(filename, mac, 15, taginfo, imageParams);
             break;
 
@@ -866,6 +869,7 @@ void drawWeather(String &filename, JsonObject &cfgobj, const tagRecord *taginfo,
 
     const auto &currentWeather = doc["current_weather"];
     const double temperature = currentWeather["temperature"].as<double>();
+    const String temperatureUnit = "°";
     float windspeed = currentWeather["windspeed"].as<float>();
     int windval = 0;
     const int winddirection = currentWeather["winddirection"].as<int>();
@@ -913,7 +917,7 @@ void drawWeather(String &filename, JsonObject &cfgobj, const tagRecord *taginfo,
     char tmpOutput[5];
     dtostrf(temperature, 2, 1, tmpOutput);
     const auto &temp = doc["temp"];
-    drawString(spr, String(tmpOutput), temp[0], temp[1], temp[2], TL_DATUM, (temperature < 0 ? imageParams.highlightColor : TFT_BLACK));
+    drawString(spr, String(tmpOutput) + temperatureUnit, temp[0], temp[1], temp[2], TL_DATUM, (temperature < 0 ? imageParams.highlightColor : TFT_BLACK));
 
     const int iconcolor = (weathercode == 55 || weathercode == 65 || weathercode == 75 || weathercode == 82 || weathercode == 86 || weathercode == 95 || weathercode == 96 || weathercode == 99)
                               ? imageParams.highlightColor
